@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STUDYVAULT — College Study Notes (₹50 via UPI & Gmail Delivery)</title>
+  <meta name="description" content="Verified college study notes for Discrete Mathematics & E-Commerce. Pay ₹50 via UPI QR to DIPANSHU kumar (8579823872@fam), submit UTR, track order status.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E%3Ctext y=%2226%22 font-size=%2226%22%3E📚%3C/text%3E%3C/svg%3E">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- ================= TOP ANNOUNCEMENT BAR ================= -->
+  <div class="top-announcement">
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+      <span>🔥 VERIFIED NOTES AT <strong class="highlight">₹50 ONLY</strong> &bull; PAY VIA UPI & GET DELIVERED ON GMAIL</span>
+      <div class="top-links">
+        <a href="javascript:void(0)" onclick="storeApp.openMyPurchasesModal()">📦 MY PURCHASES & STATUS</a>
+        <a href="javascript:void(0)" onclick="storeApp.openComplaintModal()">⚠️ RAISE COMPLAINT</a>
+        <a href="javascript:void(0)" onclick="storeApp.openReviewModal()">⭐ WRITE REVIEW</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= STICKY HEADER ================= -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="brand-logo">
+        <span class="brand-title">STUDYVAULT</span>
+        <span class="brand-tag">ACADEMIC NOTES & PRESENTATIONS</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="javascript:void(0)" class="nav-link active" onclick="storeApp.filterCategory('all')">ALL NOTES (₹50)</a></li>
+          <li><a href="javascript:void(0)" class="nav-link" onclick="storeApp.filterCategory('discrete-math')">DISCRETE MATH</a></li>
+          <li><a href="javascript:void(0)" class="nav-link" onclick="storeApp.filterCategory('e-commerce')">E-COMMERCE</a></li>
+          <li><a href="javascript:void(0)" class="nav-link" onclick="storeApp.filterCategory('pyq')">PYQ PAPERS <small style="color:var(--accent-camel);">(SOON)</small></a></li>
+          <li><a href="javascript:void(0)" class="nav-link" onclick="storeApp.filterCategory('guess-paper')">GUESS PAPERS <small style="color:var(--accent-camel);">(SOON)</small></a></li>
+          <li><a href="javascript:void(0)" class="nav-link" onclick="storeApp.filterCategory('question-bank')">QUESTION BANK <small style="color:var(--accent-camel);">(SOON)</small></a></li>
+          <li><a href="javascript:void(0)" class="nav-link" onclick="storeApp.filterCategory('mind-map')">MIND MAPS <small style="color:var(--accent-camel);">(SOON)</small></a></li>
+          <li><a href="javascript:void(0)" class="nav-link" onclick="storeApp.filterCategory('skill-roadmap')">ROADMAPS <small style="color:var(--accent-camel);">(SOON)</small></a></li>
+        </ul>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="nav-actions">
+        <!-- Search Button -->
+        <button class="action-btn" title="Search Notes" onclick="storeApp.toggleSearchModal()">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
+        <!-- Cart Button -->
+        <button class="action-btn" title="View Cart" onclick="storeApp.toggleCartDrawer(true)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge" id="cart-counter">0</span>
+        </button>
+
+        <!-- User Account Container -->
+        <div id="nav-auth-container">
+          <!-- Dynamically populated (Sign In button or User Profile Dropdown) -->
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION (REFERENCE MATCH) ================= -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      
+      <!-- Left Column -->
+      <div class="hero-content">
+        <div class="hero-eyebrow">SEMESTER EXAM NOTES &bull; ₹50 PER SUBJECT UNIT</div>
+        
+        <h1 class="hero-title">
+          <span class="title-black">EXAM & STUDY</span>
+          <span class="title-camel">ESSENTIALS</span>
+        </h1>
+        
+        <div class="hero-subtitle-divider">
+          <span>PAY VIA UPI &bull; DIRECT GMAIL DELIVERY</span>
+        </div>
+
+        <p class="hero-description">
+          Verified college study materials for <strong>Discrete Mathematics</strong> and <strong>E-Commerce</strong>. Pay <strong>₹50</strong> via UPI QR code, submit your screenshot & UTR, track live status in your account, and receive the notes directly on your Gmail within 15–30 minutes!
+        </p>
+
+        <div class="hero-actions">
+          <a href="#catalog-section" class="btn-primary">
+            <span>BUY NOTES (₹50)</span>
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <button class="btn-secondary" onclick="storeApp.openMyPurchasesModal()">
+            <span>📦 MY PURCHASES & STATUS</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Visual Frame with floating ₹50 badge -->
+      <div class="hero-visual-wrap">
+        <div class="hero-image-frame">
+          <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=900&q=80" alt="StudyVault Collection">
+        </div>
+
+        <div class="badge-circle-discount">
+          <span class="small-text">JUST</span>
+          <span class="main-pct">₹50</span>
+          <span class="sub-text">EACH</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 3-STEP UPI PAYMENT INSTRUCTIONS ================= -->
+  <section class="upi-process-strip" id="how-it-works-section">
+    <div class="container">
+      <div class="upi-process-grid">
+        
+        <div class="upi-process-step">
+          <div class="step-num-badge">1</div>
+          <div>
+            <div class="step-title">SCAN UPI QR CODE</div>
+            <div class="step-desc">Scan the UPI QR code to pay ₹50 to <strong>DIPANSHU kumar (8579823872@fam)</strong>.</div>
+          </div>
+        </div>
+
+        <div class="upi-process-step">
+          <div class="step-num-badge">2</div>
+          <div>
+            <div class="step-title">SUBMIT UTR & SCREENSHOT</div>
+            <div class="step-desc">Enter your Gmail and submit the 12-digit UTR ref number with payment screenshot.</div>
+          </div>
+        </div>
+
+        <div class="upi-process-step">
+          <div class="step-num-badge">3</div>
+          <div>
+            <div class="step-title">DELIVERED TO GMAIL</div>
+            <div class="step-desc">Track status in your account (Pending &rarr; Sent). Notes are emailed in 15–30 mins.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRODUCT CATALOG SECTION ================= -->
+  <section class="products-section" id="catalog-section">
+    <div class="container">
+      
+      <!-- Section Title Header -->
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow">VERIFIED SYLLABUS RESOURCES &bull; ₹50 EACH</div>
+          <h2 class="section-title" id="catalog-title">AVAILABLE STUDY RESOURCES</h2>
+        </div>
+        <span id="active-item-count" style="font-size:0.85rem; color:var(--text-secondary); font-weight:600;">10 Notes Available</span>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="category-filter-bar">
+        <button class="filter-tab active" data-cat="all" onclick="storeApp.filterCategory('all')">ALL NOTES (₹50)</button>
+        <button class="filter-tab" data-cat="discrete-math" onclick="storeApp.filterCategory('discrete-math')">DISCRETE MATHEMATICS</button>
+        <button class="filter-tab" data-cat="e-commerce" onclick="storeApp.filterCategory('e-commerce')">E-COMMERCE NOTES</button>
+        <button class="filter-tab soon-tab" data-cat="pyq" onclick="storeApp.filterCategory('pyq')">PREVIOUS YEAR PAPERS (COMING SOON...)</button>
+        <button class="filter-tab soon-tab" data-cat="guess-paper" onclick="storeApp.filterCategory('guess-paper')">GUESS PAPERS (COMING SOON...)</button>
+        <button class="filter-tab soon-tab" data-cat="question-bank" onclick="storeApp.filterCategory('question-bank')">QUESTION BANKS (COMING SOON...)</button>
+        <button class="filter-tab soon-tab" data-cat="mind-map" onclick="storeApp.filterCategory('mind-map')">MIND MAPS (COMING SOON...)</button>
+        <button class="filter-tab soon-tab" data-cat="skill-roadmap" onclick="storeApp.filterCategory('skill-roadmap')">SKILL ROADMAPS (COMING SOON...)</button>
+      </div>
+
+      <!-- Dynamic Coming Soon Notification Block -->
+      <div id="category-coming-soon-banner" style="display:none; margin:20px 0 30px;"></div>
+
+      <!-- Product Cards Grid -->
+      <div class="product-grid" id="product-grid">
+        <!-- Rendered via storeApp.renderProducts() -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= STUDENT REVIEWS & FEEDBACK SECTION ================= -->
+  <section class="reviews-section" id="reviews-section">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
+        <div>
+          <div class="section-eyebrow">VERIFIED STUDENT FEEDBACK</div>
+          <h2 class="section-title">WHAT STUDENTS SAY</h2>
+        </div>
+        <button class="btn-primary" onclick="storeApp.openReviewModal()">
+          ⭐ WRITE A REVIEW & FEEDBACK
+        </button>
+      </div>
+
+      <div class="reviews-grid" id="student-reviews-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-brand">
+          <div class="brand-title">STUDYVAULT</div>
+          <div class="brand-tag">ACADEMIC STUDY NOTES & PRESENTATIONS</div>
+          <p class="footer-desc">
+            Affordable study materials at ₹50 each. Pay via UPI to <strong>DIPANSHU kumar (8579823872@fam)</strong>, submit your UTR & screenshot, and receive notes straight to your Gmail.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>AVAILABLE NOW (₹50)</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="storeApp.filterCategory('discrete-math')">Discrete Mathematics Notes</a></li>
+            <li><a href="javascript:void(0)" onclick="storeApp.filterCategory('e-commerce')">E-Commerce Unit Presentations</a></li>
+            <li><a href="javascript:void(0)" onclick="storeApp.filterCategory('e-commerce')">Internet Protocols & Standards</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>STUDENT SUPPORT</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="storeApp.openMyPurchasesModal()">📦 My Purchased Notes & Status</a></li>
+            <li><a href="javascript:void(0)" onclick="storeApp.openComplaintModal()">⚠️ Raise a Complaint / Support</a></li>
+            <li><a href="javascript:void(0)" onclick="storeApp.openReviewModal()">⭐ Give Service Feedback</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 STUDYVAULT. All rights reserved.</div>
+        <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+          <div>Official UPI: <strong style="color:var(--accent-camel);">8579823872@fam</strong> (DIPANSHU kumar)</div>
+          <a href="javascript:void(0)" onclick="storeApp.openAdminModal()" style="color:#A39E96; font-size:0.78rem; text-decoration:underline;">
+            ⚙️ Admin Portal
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= USER AUTH MODAL (LOG IN / SIGN UP) ================= -->
+  <div class="modal-backdrop" id="auth-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">STUDENT ACCOUNT</h3>
+        <button class="modal-close-btn" onclick="storeApp.closeAuthModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Dual Tab Switcher -->
+        <div style="display:flex; border-bottom:1px solid var(--border-light); margin-bottom:20px;">
+          <button id="tab-auth-login" class="filter-tab active" style="flex:1; border-radius:0; padding:12px; font-weight:700; letter-spacing:0.06em;" onclick="storeApp.switchAuthTab('login')">
+            LOG IN
+          </button>
+          <button id="tab-auth-register" class="filter-tab" style="flex:1; border-radius:0; padding:12px; font-weight:700; letter-spacing:0.06em;" onclick="storeApp.switchAuthTab('signup')">
+            SIGN UP (NEW ACCOUNT)
+          </button>
+        </div>
+
+        <!-- Feedback error alert container -->
+        <div id="auth-error-banner" style="display:none; background:#FEE2E2; color:#B91C1C; padding:10px 14px; border-radius:var(--radius-sm); font-size:0.82rem; margin-bottom:14px; border-left:4px solid #EF4444;"></div>
+
+        <!-- 1. Log In Form -->
+        <form id="auth-login-form" onsubmit="storeApp.handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Gmail / Email Address *</label>
+            <input type="email" class="form-control" id="login-gmail" placeholder="yourname@gmail.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password *</label>
+            <input type="password" class="form-control" id="login-password" placeholder="Enter your password" required autocomplete="current-password">
+          </div>
+          <button type="submit" id="btn-login-submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:14px;">
+            LOG IN TO MY ACCOUNT
+          </button>
+          <div style="text-align:center; margin-top:16px; font-size:0.82rem; color:var(--text-secondary);">
+            Don't have an account? <a href="javascript:void(0)" onclick="storeApp.switchAuthTab('signup')" style="color:var(--accent-camel); font-weight:700;">Sign Up here &rarr;</a>
+          </div>
+        </form>
+
+        <!-- 2. Sign Up Form -->
+        <form id="auth-register-form" style="display:none;" onsubmit="storeApp.handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-control" id="reg-name" placeholder="Rahul Sharma" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gmail / Email Address *</label>
+            <input type="email" class="form-control" id="reg-gmail" placeholder="yourname@gmail.com" required autocomplete="email">
+            <span style="font-size:0.72rem; color:var(--text-secondary);">Notes will be sent to this email address.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Create Password * (Min. 6 Characters)</label>
+            <input type="password" class="form-control" id="reg-password" placeholder="Create a secure password" minlength="6" required autocomplete="new-password">
+          </div>
+          <button type="submit" id="btn-signup-submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:14px;">
+            CREATE ACCOUNT & SIGN UP
+          </button>
+          <div style="text-align:center; margin-top:16px; font-size:0.82rem; color:var(--text-secondary);">
+            Already registered? <a href="javascript:void(0)" onclick="storeApp.switchAuthTab('login')" style="color:var(--accent-camel); font-weight:700;">Log In here &rarr;</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= UPI PAYMENT & UTR SUBMISSION MODAL ================= -->
+  <div class="modal-backdrop" id="upi-payment-modal">
+    <div class="modal-dialog wide">
+      <div class="modal-header">
+        <h3 class="modal-title">PAY VIA UPI & SUBMIT DETAILS</h3>
+        <button class="modal-close-btn" onclick="storeApp.closePaymentModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <div class="upi-modal-layout">
+          
+          <!-- Left: User's Actual UPI QR Code -->
+          <div class="upi-qr-card">
+            <span style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-secondary); margin-bottom:4px; font-weight:700;">
+              SCAN & PAY AMOUNT
+            </span>
+            <div style="font-family:var(--font-heading); font-size:2rem; font-weight:700; color:var(--accent-camel); margin-bottom:10px;" id="upi-modal-amount">
+              ₹50
+            </div>
+
+            <!-- Real FamPay QR Code Image Uploaded by User -->
+            <div class="upi-qr-frame">
+              <img id="upi-qr-image" src="assets/upi_qr.jpg" alt="Scan QR to pay DIPANSHU kumar">
+            </div>
+
+            <!-- Account Details Box -->
+            <div class="upi-account-info-box">
+              <div style="font-size:0.8rem; font-weight:700; color:var(--text-primary);">DIPANSHU kumar</div>
+              <div class="upi-id-pill" onclick="storeApp.copyUpiId()" title="Click to copy UPI ID">
+                <span>8579823872@fam</span>
+                <span style="font-size:0.7rem; color:var(--accent-camel);">📋 COPY</span>
+              </div>
+            </div>
+
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:8px;">
+              Scan with PhonePe, Google Pay, Paytm, FamApp & all UPI apps.
+            </div>
+
+            <div style="margin-top:14px; width:100%; text-align:left;">
+              <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--text-primary); display:block; margin-bottom:4px;">
+                Selected Note(s):
+              </span>
+              <div id="upi-modal-items-list" style="max-height:80px; overflow-y:auto;"></div>
+            </div>
+          </div>
+
+          <!-- Right: Verification Form -->
+          <div>
+            <form id="upi-payment-form" onsubmit="storeApp.submitUpiPayment(event)">
+              
+              <div class="form-group">
+                <label class="form-label">Your Full Name *</label>
+                <input type="text" class="form-control" id="buyer-name" placeholder="e.g. Rahul Sharma" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" style="display:flex; justify-content:space-between;">
+                  <span>Gmail Address *</span>
+                  <span style="color:var(--accent-camel); font-size:0.7rem;">(Notes will be emailed here)</span>
+                </label>
+                <input type="email" class="form-control" id="buyer-gmail" placeholder="yourname@gmail.com" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">12-Digit UPI Transaction ID / UTR *</label>
+                <input type="text" class="form-control" id="buyer-utr" placeholder="e.g. 432109876543 (from payment receipt)" maxlength="16" required>
+                <span style="font-size:0.72rem; color:var(--text-secondary); margin-top:2px;">
+                  Find the 12-digit UTR / UPI Ref ID in your GPay, PhonePe, or Paytm receipt.
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Attach Payment Screenshot *</label>
+                <div class="screenshot-dropzone" onclick="document.getElementById('payment-screenshot-file').click()">
+                  <input type="file" id="payment-screenshot-file" accept="image/*" style="display:none;" required>
+                  <svg style="width:26px; height:26px; stroke:var(--accent-camel); margin:0 auto 4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <div id="upload-hint-text" style="font-size:0.78rem; font-weight:600;">Click to select payment screenshot</div>
+                  <img id="screenshot-preview" class="screenshot-preview-img" alt="Preview">
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:6px;">
+                CONFIRM PAYMENT & SUBMIT ORDER
+              </button>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MY PURCHASES & LIVE STATUS MODAL ================= -->
+  <div class="modal-backdrop" id="purchases-modal">
+    <div class="modal-dialog wide">
+      <div class="modal-header">
+        <h3 class="modal-title">MY PURCHASED NOTES & ORDER STATUS</h3>
+        <button class="modal-close-btn" onclick="storeApp.closeMyPurchasesModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px;">
+          Track your payment verification and delivery status. Once your 12-digit UTR is verified, notes are dispatched to your Gmail.
+        </p>
+        <div id="my-purchases-container">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RAISE A COMPLAINT MODAL ================= -->
+  <div class="modal-backdrop" id="complaint-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">⚠️ RAISE A COMPLAINT</h3>
+        <button class="modal-close-btn" onclick="storeApp.closeComplaintModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:16px;">
+          Having any issues receiving your notes or verifying your UTR? Submit your complaint below and we will resolve it promptly.
+        </p>
+        <form id="complaint-form" onsubmit="storeApp.submitComplaint(event)">
+          <div class="form-group">
+            <label class="form-label">Order ID / UTR (Optional)</label>
+            <input type="text" class="form-control" id="complaint-order-id" placeholder="e.g. #SV-82914 or your 12-digit UTR">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Gmail Address *</label>
+            <input type="email" class="form-control" id="complaint-gmail" placeholder="yourname@gmail.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Issue Category *</label>
+            <select class="form-control" id="complaint-reason">
+              <option value="Notes Not Received After 30 Mins">Notes Not Received After 30 Minutes</option>
+              <option value="Wrong Note / Unit Delivered">Wrong Note / Unit Delivered</option>
+              <option value="File Not Opening / Damaged">File Not Opening / Damaged</option>
+              <option value="UTR Reference Mistake">Mistyped UTR Number During Payment</option>
+              <option value="Other Query">Other Query</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Detailed Description *</label>
+            <textarea class="form-control" id="complaint-message" rows="3" placeholder="Describe the issue you are facing..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:8px;">
+            SUBMIT COMPLAINT TICKET
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= GIVE FEEDBACK & REVIEW MODAL ================= -->
+  <div class="modal-backdrop" id="review-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">⭐ GIVE FEEDBACK & REVIEW</h3>
+        <button class="modal-close-btn" onclick="storeApp.closeReviewModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="review-form" onsubmit="storeApp.submitReview(event)">
+          <div class="form-group" style="text-align:center; margin-bottom:16px;">
+            <label class="form-label" style="display:block; margin-bottom:8px;">Your Rating</label>
+            <div class="star-rating-select" style="font-size:2rem; cursor:pointer;">
+              <span onclick="storeApp.setRating(1)" style="color:#F59E0B;">★</span>
+              <span onclick="storeApp.setRating(2)" style="color:#F59E0B;">★</span>
+              <span onclick="storeApp.setRating(3)" style="color:#F59E0B;">★</span>
+              <span onclick="storeApp.setRating(4)" style="color:#F59E0B;">★</span>
+              <span onclick="storeApp.setRating(5)" style="color:#F59E0B;">★</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="rev-author-name" placeholder="e.g. Rahul Sharma">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Course / College</label>
+            <input type="text" class="form-control" id="rev-author-course" placeholder="e.g. BCA 3rd Sem / B.Tech CSE">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Review & Feedback *</label>
+            <textarea class="form-control" id="rev-text" rows="3" placeholder="How was the note quality, delivery speed, and overall experience?" required></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:10px;">
+            PUBLISH REVIEW
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ORDER CONFIRMATION MODAL ================= -->
+  <div class="modal-backdrop" id="order-confirmation-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color:#059669;">ORDER RECEIVED</h3>
+        <button class="modal-close-btn" onclick="storeApp.closeConfirmationModal()">✕</button>
+      </div>
+      <div class="modal-body" id="confirmation-modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PREVIEW MODAL ================= -->
+  <div class="modal-backdrop" id="preview-modal">
+    <div class="modal-dialog wide">
+      <div class="modal-header">
+        <h3 class="modal-title" id="preview-modal-title">NOTE OVERVIEW</h3>
+        <button class="modal-close-btn" onclick="storeApp.closePreviewModal()">✕</button>
+      </div>
+      <div class="modal-body" id="preview-modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SEARCH MODAL ================= -->
+  <div class="modal-backdrop" id="search-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">SEARCH STUDY NOTES</h3>
+        <button class="modal-close-btn" onclick="storeApp.toggleSearchModal(false)">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="text" id="quick-search-input" class="form-control" placeholder="Search Sets, Relations, Induction, E-Commerce, Protocols..." oninput="storeApp.handleSearchInput(this.value)" autofocus>
+        </div>
+        <div id="quick-search-results" style="max-height:280px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CART DRAWER ================= -->
+  <div class="drawer-backdrop" id="cart-backdrop" onclick="storeApp.toggleCartDrawer(false)"></div>
+  <aside class="drawer-panel" id="cart-drawer">
+    <div class="drawer-header">
+      <h3 style="font-size:1.3rem;">YOUR CART (<span id="cart-drawer-count">0</span>)</h3>
+      <button class="modal-close-btn" onclick="storeApp.toggleCartDrawer(false)">✕</button>
+    </div>
+    
+    <div class="drawer-body" id="cart-items-container"></div>
+
+    <div class="drawer-footer">
+      <div class="drawer-subtotal">
+        <span>SUBTOTAL:</span>
+        <span id="cart-subtotal">₹0</span>
+      </div>
+      <button class="btn-primary" style="width:100%; justify-content:center;" onclick="storeApp.proceedFromCart()">
+        PAY VIA UPI & GET ON GMAIL &rarr;
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= USER CHANGE PASSWORD MODAL ================= -->
+  <div class="modal-backdrop" id="user-change-password-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🔑 CHANGE MY PASSWORD</h3>
+        <button class="modal-close-btn" onclick="storeApp.closeChangePasswordModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="user-pwd-error-banner" style="display:none; background:#FEE2E2; color:#B91C1C; padding:10px 14px; border-radius:var(--radius-sm); font-size:0.82rem; margin-bottom:14px; border-left:4px solid #EF4444;"></div>
+        
+        <form id="user-pwd-form" onsubmit="storeApp.handleUserPasswordChange(event)">
+          <div class="form-group">
+            <label class="form-label">Current Password *</label>
+            <input type="password" class="form-control" id="user-curr-pwd" placeholder="Enter current password" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password * (Min. 6 characters)</label>
+            <input type="password" class="form-control" id="user-new-pwd" placeholder="Enter new password" minlength="6" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password *</label>
+            <input type="password" class="form-control" id="user-confirm-pwd" placeholder="Re-enter new password" minlength="6" required>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">
+            UPDATE PASSWORD IN CLOUD
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ADMIN LOGIN MODAL ================= -->
+  <div class="modal-backdrop" id="admin-login-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ ADMIN PORTAL ACCESS</h3>
+        <button class="modal-close-btn" onclick="storeApp.closeAdminLoginModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="admin-login-error" style="display:none; background:#FEE2E2; color:#B91C1C; padding:10px 14px; border-radius:var(--radius-sm); font-size:0.82rem; margin-bottom:14px; border-left:4px solid #EF4444;"></div>
+        
+        <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:16px;">
+          Log in with your administrator credentials to manage buy requests, view payment screenshots, and mark orders as sent in Supabase.
+        </p>
+
+        <form id="admin-login-form" onsubmit="storeApp.handleAdminLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Admin Username *</label>
+            <input type="text" class="form-control" id="admin-user-input" value="admin" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Admin Password *</label>
+            <input type="password" class="form-control" id="admin-pass-input" placeholder="Enter admin password (default: admin123)" required>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:10px;">
+            ENTER ADMIN DASHBOARD
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ADMIN DASHBOARD MODAL ================= -->
+  <div class="modal-backdrop" id="admin-dashboard-modal">
+    <div class="modal-dialog wide" style="max-width:960px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <h3 class="modal-title">⚙️ ADMIN DASHBOARD</h3>
+          <span style="background:#D1FAE5; color:#065F46; font-size:0.72rem; font-weight:700; padding:3px 8px; border-radius:var(--radius-full);">
+            ⚡ SUPABASE LIVE
+          </span>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <button class="btn-secondary" style="font-size:0.75rem; padding:4px 10px;" onclick="storeApp.loadAdminOrders()">
+            🔄 Refresh Supabase Orders
+          </button>
+          <button class="modal-close-btn" onclick="storeApp.closeAdminDashboardModal()">✕</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <!-- Admin Navigation Tabs -->
+        <div style="display:flex; border-bottom:1px solid var(--border-light); margin-bottom:20px;">
+          <button id="admin-tab-orders-btn" class="filter-tab active" style="flex:1; border-radius:0; padding:10px; font-weight:700;" onclick="storeApp.switchAdminTab('orders')">
+            📦 BUY REQUESTS & ORDERS (<span id="admin-orders-count">0</span>)
+          </button>
+          <button id="admin-tab-complaints-btn" class="filter-tab" style="flex:1; border-radius:0; padding:10px; font-weight:700;" onclick="storeApp.switchAdminTab('complaints')">
+            ⚠️ STUDENT COMPLAINTS (<span id="admin-complaints-count">0</span>)
+          </button>
+          <button id="admin-tab-pwd-btn" class="filter-tab" style="flex:1; border-radius:0; padding:10px; font-weight:700;" onclick="storeApp.switchAdminTab('password')">
+            🔑 CHANGE ADMIN PASSWORD
+          </button>
+        </div>
+
+        <!-- 1. Orders Management Tab -->
+        <div id="admin-tab-orders">
+          <div style="background:var(--bg-card); padding:12px 16px; border-radius:var(--radius-sm); margin-bottom:16px; font-size:0.85rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div>
+              <span>After sending the requested notes to the student's Gmail, click </span>
+              <strong style="color:#059669;">"MARK AS SENT TO GMAIL"</strong>.
+            </div>
+            <span style="font-size:0.75rem; color:var(--text-secondary);">Direct Supabase Cloud Sync</span>
+          </div>
+
+          <div id="admin-orders-table-container" style="max-height:480px; overflow-y:auto;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- 2. Complaints Tab -->
+        <div id="admin-tab-complaints" style="display:none;">
+          <div id="admin-complaints-table-container" style="max-height:480px; overflow-y:auto;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- 3. Change Admin Password Tab -->
+        <div id="admin-tab-password" style="display:none; max-width:500px; margin:0 auto; padding:10px 0;">
+          <h4 style="font-size:1.1rem; margin-bottom:10px;">Change Administrator Password</h4>
+          <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:16px;">
+            Updates the administrator password in Supabase cloud (<code>public.admin_config</code>).
+          </p>
+
+          <div id="admin-pwd-error-banner" style="display:none; background:#FEE2E2; color:#B91C1C; padding:10px 14px; border-radius:var(--radius-sm); font-size:0.82rem; margin-bottom:14px; border-left:4px solid #EF4444;"></div>
+
+          <form id="admin-change-pwd-form" onsubmit="storeApp.handleAdminPasswordChange(event)">
+            <div class="form-group">
+              <label class="form-label">Current Admin Password *</label>
+              <input type="password" class="form-control" id="admin-curr-pwd" placeholder="Enter current admin password" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Admin Password * (Min. 6 chars)</label>
+              <input type="password" class="form-control" id="admin-new-pwd" placeholder="Enter new admin password" minlength="6" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password *</label>
+              <input type="password" class="form-control" id="admin-confirm-pwd" placeholder="Re-enter new admin password" minlength="6" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">
+              UPDATE ADMIN PASSWORD IN SUPABASE
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAYMENT SCREENSHOT FULL VIEWER MODAL ================= -->
+  <div class="modal-backdrop" id="screenshot-viewer-modal">
+    <div class="modal-dialog" style="max-width:540px; text-align:center;">
+      <div class="modal-header">
+        <h3 class="modal-title">PAYMENT SCREENSHOT PROOF</h3>
+        <button class="modal-close-btn" onclick="storeApp.closeScreenshotViewerModal()">✕</button>
+      </div>
+      <div class="modal-body" style="padding:16px;">
+        <img id="full-screenshot-img" src="" alt="Payment Receipt" style="width:100%; max-height:500px; object-fit:contain; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
