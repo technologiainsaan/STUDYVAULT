@@ -31,6 +31,7 @@ class StoreApp {
 
   init() {
     this.loadUserSession();
+    this.checkOAuthSession();
     this.loadCart();
     this.loadReviews();
     this.applyFilter();
@@ -74,6 +75,11 @@ class StoreApp {
             <div class="dropdown-item" onclick="storeApp.openReviewModal(); storeApp.toggleUserDropdown(false);">
               <span>⭐</span> Give Feedback & Review
             </div>
+            ${(this.currentUser.gmail && this.currentUser.gmail.toLowerCase() === "dk7488697@gmail.com") ? `
+              <div class="dropdown-item" style="color:var(--accent-camel); font-weight:700; background:rgba(178,141,105,0.08);" onclick="storeApp.openAdminModal(); storeApp.toggleUserDropdown(false);">
+                <span>⚙️</span> Owner Admin Dashboard
+              </div>
+            ` : ''}
             <div class="dropdown-item" onclick="storeApp.openChangePasswordModal(); storeApp.toggleUserDropdown(false);">
               <span>🔑</span> Change Password
             </div>
@@ -383,9 +389,75 @@ class StoreApp {
     }
   }
 
-  logoutUser() {
+  async loginWithGoogle() {
+    this.clearAuthError();
+    if (!window.supabaseService || !window.supabaseService.isConnected) {
+      this.showToast("Connecting to cloud database, please try again in a moment.", "info");
+      return;
+    }
+
+    try {
+      this.showToast("Redirecting to Google Sign-In...", "info");
+      const redirectUrl = window.location.origin + window.location.pathname;
+      const { data, error } = await window.supabaseService.client.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: redirectUrl
+        }
+      });
+      if (error) throw error;
+    } catch (err) {
+      console.error("Google Auth error:", err);
+      let msg = err.message || "Failed to initialize Google login.";
+      if (msg.toLowerCase().includes("not enabled") || msg.toLowerCase().includes("unsupported provider") || msg.toLowerCase().includes("disabled")) {
+        msg = "Google Sign-In needs to be enabled in your Supabase Dashboard: Go to Authentication -> Providers -> Google, and toggle it ON. In the meantime, you can sign in directly with email!";
+      }
+      this.setAuthError(msg);
+      this.showToast("Google Login: " + msg, "error");
+    }
+  }
+
+  async checkOAuthSession() {
+    if (!window.supabaseService || !window.supabaseService.client) return;
+    try {
+      const { data, error } = await window.supabaseService.client.auth.getSession();
+      if (!error && data && data.session && data.session.user) {
+        const u = data.session.user;
+        const gmail = (u.email || "").toLowerCase().trim();
+        const name = (u.user_metadata && (u.user_metadata.full_name || u.user_metadata.name)) || gmail.split("@")[0];
+
+        const googleUser = {
+          id: u.id,
+          name: name,
+          gmail: gmail,
+          authProvider: "google",
+          joinedAt: new Date().toLocaleDateString()
+        };
+
+        // Sync with public.users table in Supabase
+        try {
+          await window.supabaseService.saveUser(googleUser);
+        } catch (e) {}
+
+        this.currentUser = googleUser;
+        localStorage.setItem("studyvault_current_user", JSON.stringify(googleUser));
+        this.updateAuthUI();
+        this.showToast(`Signed in with Google as ${name}!`, "success");
+      }
+    } catch (e) {
+      console.warn("checkOAuthSession error:", e);
+    }
+  }
+
+  async logoutUser() {
     this.currentUser = null;
+    sessionStorage.removeItem("studyvault_admin_auth");
     localStorage.removeItem("studyvault_current_user");
+    if (window.supabaseService && window.supabaseService.client) {
+      try {
+        await window.supabaseService.client.auth.signOut();
+      } catch (e) {}
+    }
     this.updateAuthUI();
     this.showToast("Signed out successfully", "info");
   }
@@ -1346,6 +1418,14 @@ class StoreApp {
 
   // ================= ADMIN PORTAL & MANAGEMENT =================
   openAdminModal() {
+    // 1. Auto-access if currently logged in as the verified store owner
+    if (this.currentUser && this.currentUser.gmail && this.currentUser.gmail.toLowerCase() === "dk7488697@gmail.com") {
+      sessionStorage.setItem("studyvault_admin_auth", "true");
+      this.openAdminDashboardModal();
+      return;
+    }
+
+    // 2. Check existing admin session
     if (sessionStorage.getItem("studyvault_admin_auth") === "true") {
       this.openAdminDashboardModal();
     } else {
@@ -1369,7 +1449,7 @@ class StoreApp {
 
   async handleAdminLogin(e) {
     e.preventDefault();
-    const user = document.getElementById("admin-user-input").value.trim();
+    const userInput = (document.getElementById("admin-user-input").value || "").trim().toLowerCase();
     const pass = document.getElementById("admin-pass-input").value;
     const banner = document.getElementById("admin-login-error");
 
@@ -1380,39 +1460,43 @@ class StoreApp {
       }
     };
 
-    if (user !== "admin") {
-      showError("Invalid admin username. Please use 'admin'.");
+    if (!userInput || !pass) {
+      showError("Please enter both username/email and password.");
       return;
     }
 
     const inputHash = await this.hashPassword(pass);
     let valid = false;
 
-    // 1. Check Supabase admin_config
-    if (window.supabaseService) {
+    // 1. Check Supabase live admin_config
+    if (window.supabaseService && window.supabaseService.isConnected) {
       const config = await window.supabaseService.getAdminConfig();
-      if (config && config.password_hash) {
-        valid = (config.password_hash === inputHash);
+      if (config) {
+        const allowedUser = (config.username || "admin").toLowerCase();
+        const allowedEmail = (config.admin_email || "dk7488697@gmail.com").toLowerCase();
+
+        if (userInput === allowedUser || userInput === allowedEmail) {
+          valid = (config.password_hash === inputHash);
+        }
       }
     }
 
-    // 2. Default admin123 hash or local override
-    const defaultHash = "b23487df00dc4d4dcc336068a299c729c17421f8162b85acafe8eb8a807634eb";
-    const localSavedAdminHash = localStorage.getItem("studyvault_admin_pwd_hash");
-
-    if (localSavedAdminHash) {
-      valid = valid || (localSavedAdminHash === inputHash);
-    } else {
-      valid = valid || (defaultHash === inputHash) || (pass === "admin123");
+    // 2. Fallback to local admin hash (from past password changes, NEVER hardcoded admin123)
+    if (!valid) {
+      const localSavedAdminHash = localStorage.getItem("studyvault_admin_pwd_hash");
+      if (localSavedAdminHash && (userInput === "admin" || userInput === "dk7488697@gmail.com")) {
+        valid = (localSavedAdminHash === inputHash);
+      }
     }
 
+    // STRICT CHECK: ZERO fallback to admin123. Random visitors are blocked!
     if (valid) {
       sessionStorage.setItem("studyvault_admin_auth", "true");
       this.closeAdminLoginModal();
       this.openAdminDashboardModal();
       this.showToast("Welcome, Administrator!", "success");
     } else {
-      showError("Incorrect administrator password.");
+      showError("Access Denied: Invalid administrator credentials. Only the verified store administrator can log in.");
     }
   }
 
