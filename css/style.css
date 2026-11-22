@@ -1408,16 +1408,20 @@ textarea.form-control {
     font-size: 0.74rem;
   }
 
-  /* Product Catalog Grid */
+  /* Product Catalog Grid on Tablet (681px - 1024px) */
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 16px;
+  }
+  .product-card {
+    min-width: 0;
+    width: 100%;
   }
   .card-media {
-    height: 180px;
+    height: 190px;
   }
   .card-info {
-    padding: 10px 10px 14px;
+    padding: 12px 12px 16px;
   }
   .card-title {
     font-size: 0.95rem;
@@ -1444,16 +1448,20 @@ textarea.form-control {
     gap: 18px;
   }
 
-  /* Modals Base */
+  /* Modals Base: Completely fluid on Mobile & Tablets */
   .modal-backdrop {
-    padding: 8px;
-    align-items: flex-end;
+    padding: 10px !important;
+    align-items: center !important;
   }
-  .modal-dialog {
+  .modal-dialog,
+  .modal-dialog.wide,
+  .admin-dialog {
     max-width: 100% !important;
-    width: 100%;
-    max-height: 94vh;
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    width: 100% !important;
+    max-height: 94vh !important;
+    border-radius: var(--radius-sm) !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
   }
   .modal-header {
     padding: 14px 16px;
@@ -1465,17 +1473,30 @@ textarea.form-control {
     padding: 16px 14px;
   }
 
-  /* UPI Modal on Mobile */
+  /* UPI Modal on Mobile & Tablet */
+  .upi-modal-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+    width: 100% !important;
+  }
   .upi-qr-card {
     padding: 14px;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
   .upi-qr-frame {
-    width: 190px;
+    width: 180px;
+    max-width: 100%;
   }
   .upi-id-pill {
     font-size: 0.8rem;
     padding: 6px 10px;
     word-break: break-all;
+    max-width: 100%;
+  }
+  .screenshot-dropzone {
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   /* Reviews & Footer */
@@ -1488,44 +1509,29 @@ textarea.form-control {
   }
 }
 
-/* Mobile Phones (< 480px) */
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 2.3rem;
-  }
-  .hero-eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-  }
-  .hero-subtitle-divider span {
-    font-size: 0.72rem;
-  }
-  .hero-actions .btn-primary,
-  .hero-actions .btn-secondary {
-    width: 100%;
-    justify-content: center;
-  }
-  .badge-circle-discount {
-    width: 60px;
-    height: 60px;
-    top: -8px;
-    right: 2%;
-  }
-  .badge-circle-discount .main-pct {
-    font-size: 1.35rem;
-  }
-  
-  /* Products on small phone: 1 column for large readable cards */
+/* Mobile Phones (<= 640px) */
+@media (max-width: 640px) {
+  /* Products on phone: Clean 1-column layout */
   .product-grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+  .product-card {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
   .card-media {
-    height: 220px;
+    height: 210px;
   }
   .card-title {
     font-size: 1.05rem;
   }
+}
+
+/* Mobile Phones (< 480px) */
+@media (max-width: 480px) {
 
   /* Brand Logo & Nav */
   .brand-logo .brand-title {
