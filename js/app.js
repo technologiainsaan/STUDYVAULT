@@ -32,6 +32,7 @@ class StoreApp {
   init() {
     this.loadUserSession();
     this.checkOAuthSession();
+    this.initGoogleAuth();
     this.loadCart();
     this.loadReviews();
     this.applyFilter();
@@ -389,8 +390,131 @@ class StoreApp {
     }
   }
 
+  // ================= GOOGLE DIRECT SIGN-IN (GSI & SUPABASE) =================
+  initGoogleAuth() {
+    this.googleClientId = "638144182463-1b2q3vh64la8eqf7uqd86gt5ut5t5mke.apps.googleusercontent.com";
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      try {
+        window.google.accounts.id.initialize({
+          client_id: this.googleClientId,
+          callback: (response) => this.handleGoogleCredentialResponse(response),
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+
+        // Try rendering native Google button if container exists
+        const btnContainer = document.getElementById("google-signin-btn-container");
+        if (btnContainer) {
+          window.google.accounts.id.renderButton(btnContainer, {
+            theme: "outline",
+            size: "large",
+            width: 330,
+            text: "continue_with"
+          });
+          const customBtn = document.getElementById("custom-google-btn");
+          if (customBtn) customBtn.style.display = "none"; // Hide fallback if native renders
+        }
+      } catch (e) {
+        console.warn("GSI init exception:", e);
+      }
+    } else {
+      setTimeout(() => this.initGoogleAuth(), 800);
+    }
+  }
+
+  handleGoogleCredentialResponse(response) {
+    if (!response || !response.credential) return;
+    try {
+      const payload = this.parseJwt(response.credential);
+      if (!payload || !payload.email) return;
+
+      const gmail = payload.email.toLowerCase().trim();
+      const name = payload.name || gmail.split("@")[0];
+
+      const googleUser = {
+        id: "g-" + (payload.sub || Date.now()),
+        name: name,
+        gmail: gmail,
+        picture: payload.picture || "",
+        authProvider: "google",
+        joinedAt: new Date().toLocaleDateString()
+      };
+
+      // Save user to Supabase
+      if (window.supabaseService && window.supabaseService.isConnected) {
+        window.supabaseService.saveUser(googleUser);
+      }
+
+      // Save to local registered users
+      const localUsers = JSON.parse(localStorage.getItem("studyvault_registered_users") || "[]");
+      if (!localUsers.some(u => u.gmail.toLowerCase() === gmail)) {
+        localUsers.push(googleUser);
+        localStorage.setItem("studyvault_registered_users", JSON.stringify(localUsers));
+      }
+
+      this.currentUser = googleUser;
+      localStorage.setItem("studyvault_current_user", JSON.stringify(googleUser));
+
+      this.closeAuthModal();
+      this.updateAuthUI();
+      this.showToast(`Signed in with Google as ${name}!`, "success");
+
+      // Auto-unlock admin if owner
+      if (gmail === "dk7488697@gmail.com") {
+        sessionStorage.setItem("studyvault_admin_auth", "true");
+        this.showToast("Verified Store Owner recognized! Admin Portal unlocked.", "success");
+      }
+
+      // Resume pending purchase if user clicked buy before signing up
+      if (this.pendingPurchaseAction) {
+        const pending = this.pendingPurchaseAction;
+        this.pendingPurchaseAction = null;
+        setTimeout(() => {
+          if (pending.type === "buyNow") this.buyNowDirect(pending.productId);
+          else if (pending.type === "cart") this.proceedFromCart();
+        }, 300);
+      }
+    } catch (e) {
+      console.error("Google credential error:", e);
+      this.showToast("Failed to process Google sign-in", "error");
+    }
+  }
+
+  parseJwt(token) {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  }
+
   async loginWithGoogle() {
     this.clearAuthError();
+
+    // 1. First attempt: Direct Google Identity One-Tap Prompt
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      try {
+        window.google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            this.fallbackSupabaseGoogleOAuth();
+          }
+        });
+        return;
+      } catch (e) {
+        console.warn("GSI prompt exception, falling back:", e);
+      }
+    }
+
+    // 2. Second attempt: Fallback to Supabase OAuth
+    this.fallbackSupabaseGoogleOAuth();
+  }
+
+  async fallbackSupabaseGoogleOAuth() {
     if (!window.supabaseService || !window.supabaseService.isConnected) {
       this.showToast("Connecting to cloud database, please try again in a moment.", "info");
       return;
@@ -410,10 +534,10 @@ class StoreApp {
       console.error("Google Auth error:", err);
       let msg = err.message || "Failed to initialize Google login.";
       if (msg.toLowerCase().includes("not enabled") || msg.toLowerCase().includes("unsupported provider") || msg.toLowerCase().includes("disabled")) {
-        msg = "Google Sign-In needs to be enabled in your Supabase Dashboard: Go to Authentication -> Providers -> Google, and toggle it ON. In the meantime, you can sign in directly with email!";
+        msg = "To enable Google Sign-In via Supabase: In your Supabase Dashboard, enter your Google Client Secret and press Save. In the meantime, you can sign in directly with email!";
       }
       this.setAuthError(msg);
-      this.showToast("Google Login: " + msg, "error");
+      this.showToast(msg, "error");
     }
   }
 
