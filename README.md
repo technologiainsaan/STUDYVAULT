@@ -49,11 +49,20 @@ A full-stack, high-conversion academic study marketplace and delivery tracking s
 
 ## 🚀 Running Locally
 
+### Option 1 (One-Click Start):
+Simply double-click **`start_website.bat`** in the project folder. It starts the local server and automatically opens the website in your browser!
+
+### Option 2 (Via Terminal / CMD):
+Make sure your terminal is inside the project directory:
 ```bash
-# Start a simple HTTP server using Python
+# 1. Switch drive and navigate to project folder
+d:
+cd "D:\WEBSITES\FIRST WEBSITE TRY 2"
+
+# 2. Start Python server
 python -m http.server 3000
 ```
-Open **`http://localhost:3000`** in any modern web browser.
+Then visit: **`http://localhost:3000`** in your browser.
 
 ---
 
