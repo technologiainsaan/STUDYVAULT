@@ -1349,7 +1349,7 @@ class StoreApp {
     if (title) title.textContent = product.title;
 
     body.innerHTML = `
-      <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:24px;">
+      <div class="preview-modal-grid">
         <div>
           <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border-light);">
             <img src="${product.image}" alt="${product.title}" style="width:100%; height:260px; object-fit:cover;">

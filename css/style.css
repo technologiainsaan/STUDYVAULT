@@ -1286,27 +1286,291 @@ textarea.form-control {
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================= PREVIEW MODAL GRID ================= */
+.preview-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 24px;
+}
+
+/* ================= COMPREHENSIVE RESPONSIVE STYLES ================= */
+
+/* Tablets & Small Desktops (<= 1024px) */
 @media (max-width: 1024px) {
+  .container {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
   .hero-title { font-size: 3.6rem; }
-  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .product-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .upi-process-grid { grid-template-columns: 1fr; }
   .upi-process-step { border-right: none; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; }
   .upi-modal-layout { grid-template-columns: 1fr; }
-  .reviews-grid { grid-template-columns: 1fr; }
+  .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1.2fr 1fr 1fr; gap: 24px; }
 }
 
+/* Tablets & Mobile Landscape (<= 768px) */
 @media (max-width: 768px) {
+  /* Announcement bar */
+  .top-announcement {
+    padding: 6px 0;
+  }
+  .top-announcement .container {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .top-announcement .top-links {
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  /* Header */
+  .header-inner {
+    padding: 10px 0;
+  }
   .nav-menu { display: none; }
-  .hero-grid { grid-template-columns: 1fr; text-align: center; }
-  .hero-subtitle-divider, .hero-actions { justify-content: center; }
-  .hero-description { margin-left: auto; margin-right: auto; }
-  .hero-title { font-size: 3rem; }
-  .product-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr; }
+  .brand-logo .brand-title {
+    font-size: 1.5rem;
+  }
+  .brand-tag {
+    display: none;
+  }
+  .nav-actions {
+    gap: 10px;
+  }
+  .user-account-btn {
+    padding: 7px 12px;
+    font-size: 0.75rem;
+  }
+
+  /* Hero */
+  .hero-section {
+    padding: 30px 0 40px;
+  }
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 32px;
+  }
+  .hero-eyebrow {
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+  .hero-title {
+    font-size: 3rem;
+    line-height: 1.05;
+  }
+  .hero-subtitle-divider {
+    justify-content: center;
+  }
+  .hero-description {
+    margin: 0 auto 22px;
+    font-size: 0.92rem;
+  }
+  .hero-actions {
+    justify-content: center;
+    gap: 10px;
+  }
+  .hero-image-frame {
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  .badge-circle-discount {
+    width: 68px;
+    height: 68px;
+    top: -10px;
+    right: 8%;
+  }
+  .badge-circle-discount .main-pct {
+    font-size: 1.6rem;
+  }
+
+  /* Category Horizontal Touch Scroll (App-style) */
+  .category-filter-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    scrollbar-width: none;
+  }
+  .category-filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .category-filter-bar .filter-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 8px 14px;
+    font-size: 0.74rem;
+  }
+
+  /* Product Catalog Grid */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .card-media {
+    height: 180px;
+  }
+  .card-info {
+    padding: 10px 10px 14px;
+  }
+  .card-title {
+    font-size: 0.95rem;
+    min-height: 2.3em;
+  }
+  .card-price {
+    font-size: 1.05rem;
+  }
+  
+  /* Touch Devices: Always Show Buy/Cart Buttons */
+  .card-actions {
+    opacity: 1 !important;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
+    padding: 6px;
+  }
+  .btn-card-action {
+    font-size: 0.68rem;
+    padding: 6px 4px;
+  }
+
+  /* Preview modal */
+  .preview-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  /* Modals Base */
+  .modal-backdrop {
+    padding: 8px;
+    align-items: flex-end;
+  }
+  .modal-dialog {
+    max-width: 100% !important;
+    width: 100%;
+    max-height: 94vh;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+  .modal-header {
+    padding: 14px 16px;
+  }
+  .modal-title {
+    font-size: 1.1rem;
+  }
+  .modal-body {
+    padding: 16px 14px;
+  }
+
+  /* UPI Modal on Mobile */
+  .upi-qr-card {
+    padding: 14px;
+  }
+  .upi-qr-frame {
+    width: 190px;
+  }
+  .upi-id-pill {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    word-break: break-all;
+  }
+
+  /* Reviews & Footer */
+  .reviews-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
 }
 
+/* Mobile Phones (< 480px) */
 @media (max-width: 480px) {
-  .product-grid { grid-template-columns: 1fr; }
-  .hero-title { font-size: 2.5rem; }
+  .hero-title {
+    font-size: 2.3rem;
+  }
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+  .hero-subtitle-divider span {
+    font-size: 0.72rem;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+  .badge-circle-discount {
+    width: 60px;
+    height: 60px;
+    top: -8px;
+    right: 2%;
+  }
+  .badge-circle-discount .main-pct {
+    font-size: 1.35rem;
+  }
+  
+  /* Products on small phone: 1 column for large readable cards */
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .card-media {
+    height: 220px;
+  }
+  .card-title {
+    font-size: 1.05rem;
+  }
+
+  /* Brand Logo & Nav */
+  .brand-logo .brand-title {
+    font-size: 1.3rem;
+  }
+  .action-btn {
+    width: 34px;
+    height: 34px;
+  }
+  .user-account-btn {
+    padding: 5px 8px;
+    font-size: 0.7rem;
+  }
+
+  /* Drawer panel */
+  .drawer-panel {
+    max-width: 100%;
+  }
+
+  /* Toast notifications */
+  .toast-container {
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+  }
+  .toast {
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* Admin tabs */
+  #admin-dashboard-modal .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  #admin-dashboard-modal .modal-header > div:last-child {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  #admin-tab-orders-btn,
+  #admin-tab-complaints-btn,
+  #admin-tab-pwd-btn {
+    font-size: 0.7rem;
+    padding: 8px 4px;
+  }
 }
